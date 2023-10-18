@@ -1,0 +1,14 @@
+{% extends "reviews/base.html" %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="position-absolute top-50 start-50 translate-middle ">
+        <form id="register-form" method='POST' style="width: 20rem;">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-primary" type="submit">Log In</button>
+        </form>
+
+
+    </div>
+{% endblock %}
