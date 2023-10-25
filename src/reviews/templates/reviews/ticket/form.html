@@ -1,0 +1,10 @@
+{% extends "reviews/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-6 mx-auto">
+            {% crispy form %}
+        </div>
+    </div>
+{% endblock %}

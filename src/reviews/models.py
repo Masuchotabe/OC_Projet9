@@ -1,5 +1,5 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -29,7 +29,7 @@ class UserFollows(models.Model):
     class Meta:
         # ensures we don't get multiple UserFollows instances
         # for unique user-user_followed pairs
-        unique_together = ('user', 'followed_user', )
+        unique_together = ('user', 'followed_user',)
 
 
 class UserBlocked(models.Model):
@@ -39,4 +39,4 @@ class UserBlocked(models.Model):
     class Meta:
         # ensures we don't get multiple UserBlocked instances
         # for unique user-blocked_user pairs
-        unique_together = ('user', 'blocked_user', )
+        unique_together = ('user', 'blocked_user',)
