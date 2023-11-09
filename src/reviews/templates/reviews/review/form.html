@@ -1,0 +1,13 @@
+{% extends "reviews/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-6 mx-auto">
+            {% if form.instance.ticket %}
+                {% include "reviews/ticket/detail_snippet.html" with object=form.instance.ticket %}
+            {% endif %}
+            {% crispy form %}
+        </div>
+    </div>
+{% endblock %}

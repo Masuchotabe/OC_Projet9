@@ -11,7 +11,7 @@ urlpatterns = [
                   path('tickets/<int:pk>/detail/', views.TicketDetailView.as_view(), name='ticket-detail'),
                   path('tickets/<int:pk>/delete/', views.TicketDeleteView.as_view(), name='ticket-delete'),
 
-    path('tickets/<int:ticket_id>/review/add/', views.ReviewCreateView.as_view(), name='review-create'),
-    # path('review/update/', views.ReviewtUpdateView.as_view(), name='review-update'),
-    # path('tickets/<int:pk>/delete/', views.TicketDeleteView.as_view(), name='review-delete'),
-]
+                  path('tickets/<int:ticket_id>/review/add/', views.ReviewCreateView.as_view(), name='review-create'),
+                  path('review/<int:pk>/update/', views.ReviewUpdateView.as_view(), name='review-update'),
+                  # path('tickets/<int:pk>/delete/', views.TicketDeleteView.as_view(), name='review-delete'),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

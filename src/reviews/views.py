@@ -42,27 +42,44 @@ class TicketDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class ReviewCreateView(LoginRequiredMixin, CreateView):
-    model = Ticket
-    form_class = TicketForm
+    model = Review
+    form_class = ReviewForm
     template_name_suffix = "/form"
     success_url = reverse_lazy("home")
-
-    def get_initial(self):
-        # Récupérez le ticket à partir de l'URL
-        ticket_id = self.kwargs.get('ticket_id')
-        if ticket_id:
-            return {'ticket': ticket_id}
-        return {}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         ticket_id = self.kwargs.get('ticket_id')
         if ticket_id:
-            ticket = Ticket.objects.get(id='ticket_id')
-            print(ticket)
+            ticket = Ticket.objects.get(id=ticket_id)
             context['ticket'] = ticket
         return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        ticket_id = self.kwargs.get('ticket_id')
+        if ticket_id:
+            form.instance.ticket_id = ticket_id
+        return super().form_valid(form)
+
+
+class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name_suffix = "/form"
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ticket_id = self.kwargs.get('ticket_id')
+        if ticket_id:
+            ticket = Ticket.objects.get(id=ticket_id)
+            context['ticket'] = ticket
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        ticket_id = self.kwargs.get('ticket_id')
+        if ticket_id:
+            form.instance.ticket_id = ticket_id
         return super().form_valid(form)
