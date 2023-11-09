@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 
-from reviews.forms import TicketForm
-from reviews.models import Ticket
+from reviews.forms import TicketForm, ReviewForm
+from reviews.models import Ticket, Review
 
 
 # Create your views here.
@@ -29,6 +29,11 @@ class TicketUpdateView(LoginRequiredMixin, UpdateView):
     form_class = TicketForm
     template_name_suffix = "/form"
     success_url = reverse_lazy("home")
+
+
+class TicketDetailView(LoginRequiredMixin, DetailView):
+    model = Ticket
+    template_name_suffix = "/detail"
 
 
 class TicketDeleteView(LoginRequiredMixin, DeleteView):

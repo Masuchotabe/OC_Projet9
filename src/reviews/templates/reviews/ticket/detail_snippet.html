@@ -1,0 +1,6 @@
+{% load static %}
+
+<h2>{{ object.title }}</h2>
+<p>{{ object.description }}</p>
+<p>Créé par {{ object.user }} le {{ object.time_created|date:"d M Y" }} à {{ object.time_created|date:"H:i:s" }}</p>
+<img src="{{ object.image.url }}" width="150">

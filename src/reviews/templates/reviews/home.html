@@ -1,5 +1,14 @@
 {% extends "reviews/base.html" %}
 
 {% block content %}
-    <p>test connexion</p>
+    <div class="row justify-content-center">
+        <div class="col-auto d-flex justify-content-center ">
+            <a class="btn btn-primary m-2" href="{% url 'ticket-create' %}">
+                Demander une critique
+            </a>
+            <a class="btn btn-primary m-2" href="#">
+                Créer une critique
+            </a>
+        </div>
+    </div>
 {% endblock %}
