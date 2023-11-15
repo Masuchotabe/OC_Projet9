@@ -11,4 +11,11 @@
             </a>
         </div>
     </div>
+    <div class="row justify-content-center">
+        <div class="col-6 mx-auto">
+            {% for post in posts %}
+                {% include 'reviews/ticket/detail_snippet.html' with object=post %}
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

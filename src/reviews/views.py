@@ -10,6 +10,7 @@ from reviews.models import Ticket, Review
 # Create your views here.
 
 def home(request):
+    posts = Ticket.objects.all()
     return render(request, "reviews/home.html", locals())
 
 
