@@ -1,9 +1,12 @@
-from crispy_forms.bootstrap import InlineRadios
+from crispy_forms.bootstrap import InlineRadios, FieldWithButtons
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, HTML
+from crispy_forms.layout import Submit, Layout, Div, HTML, Field
 from django import forms
-from django.forms import RadioSelect
+from django.core.exceptions import ValidationError
+from django.forms import RadioSelect, Textarea, CharField
+from django.utils.translation import gettext as _
 
+from authentication.models import User
 from reviews.models import Ticket, Review
 
 
@@ -37,7 +40,13 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['headline', 'rating', "body"]
         widgets = {
-            "rating": RadioSelect(choices=[(i, i) for i in range(5)])
+            "body": Textarea(attrs={"rows": 3}),
+            "rating": RadioSelect(choices=[(i, i) for i in range(6)])
+        }
+        labels = {
+            'headline': "Titre",
+            'rating': "Note",
+            'body': "Commentaire"
         }
 
     def __init__(self, *args, **kwargs):
@@ -47,14 +56,35 @@ class ReviewForm(forms.ModelForm):
         self.helper.form_method = 'post'
         self.helper.layout = Layout(
             'headline',
-            'body',
             InlineRadios('rating'),
+            'body',
             Div(
                 HTML(
                     """<a class="btn btn-secondary m-2" href="{% url 'home' %}">
                     Annuler
                     </a>"""),
-                Submit('submit', 'Enregistrer', css_class="mx-auto"),
+                Submit('submit', 'Enregistrer', css_class="m-2"),
                 css_class="d-flex justify-content-center"
             )
         )
+
+
+class UserFollowForm(forms.Form):
+    username = CharField(max_length=150, label="Nom d'utilisateur")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'FollowForm'
+        self.helper.form_method = 'post'
+        self.helper.form_show_labels = False
+        self.helper.layout = Layout(
+            FieldWithButtons(Field('username', placeholder="Nom d'utilisateur"),
+                             Submit('submit', 'Suivre')),
+        )
+
+    def clean_username(self):
+        data = self.cleaned_data["username"]
+        if not User.objects.filter(username=data).exists():
+            raise ValidationError(_("Ce nom d'utilisateur n'existe pas."), code='bad_username')
+        return data

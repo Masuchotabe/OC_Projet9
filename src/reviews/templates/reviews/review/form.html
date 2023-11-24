@@ -4,12 +4,20 @@
 {% block content %}
     <div class="row">
         <div class="col-6 mx-auto">
-            {% if form.instance.ticket %}
-                {% include "reviews/ticket/detail_snippet.html" with object=form.instance.ticket %}
-            {% elif ticket %}
-                {% include "reviews/ticket/detail_snippet.html" with object=ticket %}
-            {% endif %}
-            {% crispy form %}
+            <div class="row border rounded-top">
+                <p class="mb-0">Vous êtes en train de poster en réponse à </p>
+                <div class="d-flex justify-content-center align-items-center px-4">
+                    {% if form.instance.ticket %}
+                        {% include "reviews/ticket/detail_snippet.html" with object=form.instance.ticket in_review=True%}
+                    {% elif ticket %}
+                        {% include "reviews/ticket/detail_snippet.html" with object=ticket in_review=True %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row border border-top-0 p-2">
+                <h6>Critique</h6>
+                {% crispy form %}
+            </div>
         </div>
     </div>
 {% endblock %}
