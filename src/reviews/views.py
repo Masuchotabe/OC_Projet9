@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, FormView
 
 from authentication.models import User
@@ -99,3 +100,11 @@ class UserFollowView(LoginRequiredMixin, FormView):
         user_to_follow = User.objects.get_by_natural_key(username)
         UserFollows.objects.create(user=user, followed_user=user_to_follow)
         return HttpResponseRedirect(self.get_success_url())
+
+
+class UserUnfollowView(LoginRequiredMixin, View):
+
+    def post(self, request, user_follow_id, *args, **kwargs):
+        user = self.request.user
+        user.following.get(id=user_follow_id).delete()
+        return HttpResponseRedirect(reverse("user-follow"))

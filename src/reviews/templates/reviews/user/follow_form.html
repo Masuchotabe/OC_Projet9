@@ -21,7 +21,15 @@
                                 {{ user_follow.followed_user }}
                             </td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-warning p-1 mx-auto text-nowrap">Se désabonner</a>
+                                <form action="{% url 'user-unfollow' user_follow.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" value="Se désabonner"
+                                            class="btn btn-warning p-1 mx-auto text-nowrap"
+                                    >
+                                        Se désabonner
+                                    </button>
+                                </form>
+
                                 <!-- TODO : modifier lien -->
                             </td>
                         </tr>

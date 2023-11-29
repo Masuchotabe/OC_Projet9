@@ -15,5 +15,7 @@ urlpatterns = [
                   path('review/<int:pk>/update/', views.ReviewUpdateView.as_view(), name='review-update'),
                   # path('tickets/<int:pk>/delete/', views.TicketDeleteView.as_view(), name='review-delete'),
 
-                  path('user/follows', views.UserFollowView.as_view(), name='user-follow')
+                  path('user/follows', views.UserFollowView.as_view(), name='user-follow'),
+                  path('user/userfollow/<int:user_follow_id>/delete', views.UserUnfollowView.as_view(),
+                       name='user-unfollow')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
