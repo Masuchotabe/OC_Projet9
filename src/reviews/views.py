@@ -6,7 +6,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 
 from authentication.models import User
 from reviews.forms import TicketForm, ReviewForm, UserFollowForm
-from reviews.models import Ticket, Review
+from reviews.models import Ticket, Review, UserFollows
 
 
 # Create your views here.
@@ -88,12 +88,14 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class UserFollowView(FormView):
+class UserFollowView(LoginRequiredMixin, FormView):
     form_class = UserFollowForm
-    success_url = reverse_lazy("user-follow")  # TODO A MODIFIER
+    success_url = reverse_lazy("user-follow")
     template_name = "reviews/user/follow_form.html"
 
     def form_valid(self, form):
+        user = self.request.user
         username = form.cleaned_data["username"]
         user_to_follow = User.objects.get_by_natural_key(username)
+        UserFollows.objects.create(user=user, followed_user=user_to_follow)
         return HttpResponseRedirect(self.get_success_url())

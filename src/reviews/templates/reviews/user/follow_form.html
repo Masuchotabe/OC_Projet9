@@ -3,13 +3,54 @@
 
 {% block content %}
     <div class="row justify-content-center text-center">
-        <h1 class="mb-4">Suivre un nouvel utilisateur</h1>
+        <h2 class="mb-4">Suivre un nouvel utilisateur</h2>
         <div class="col-auto d-flex justify-content-center ">
             {% crispy form %}
         </div>
     </div>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center text-center">
+        <h2 class="mb-4">Abonnements</h2>
         <div class="col-6 mx-auto">
+            {% if request.user.following.exists %}
+                <table class="table table-bordered align-middle ">
+                    <caption>Table des abonnements</caption>
+
+                    {% for user_follow in request.user.following.all %}
+                        <tr>
+                            <td class="text-start w-100">
+                                {{ user_follow.followed_user }}
+                            </td>
+                            <td class="text-center">
+                                <a href="#" class="btn btn-warning p-1 mx-auto text-nowrap">Se désabonner</a>
+                                <!-- TODO : modifier lien -->
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Vous ne suivez personne pour le moment.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row justify-content-center text-center">
+        <h2 class="mb-4">Abonnés</h2>
+        <div class="col-6 mx-auto">
+            {% if request.user.followed_by.exists %}
+                <table class="table table-bordered align-middle ">
+                    <caption>Table des abonnés</caption>
+
+                    {% for user_follow in request.user.followed_by.all %}
+                        <tr>
+                            <td class="text-start w-100">
+                                {{ user_follow.user }}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Vous n'avez pas encore d'abonné.</p>
+            {% endif %}
 
         </div>
     </div>

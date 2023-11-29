@@ -7,7 +7,7 @@
                     {% if object.user == request.user %}
                         <small>Vous avez demandé cette critique</small>
                     {% else %}
-                        <small>{{ request.user }} a demandé cette critique</small>
+                        <small>{{ object.user }} a demandé cette critique</small>
                     {% endif %}
 
                     <small class="ms-auto">
