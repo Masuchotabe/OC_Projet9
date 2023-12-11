@@ -1,5 +1,4 @@
 {% load static %}
-{% if not in_review %}
     <div class="card m-3 w-100" >
         <div class="row g-0">
             <div class="card-body">
@@ -27,6 +26,7 @@
                          alt="Image de la critique {{ object.title }}">
                 {% endif %}
             </div>
+        {% if not in_review %}
             <div class="col-6 d-flex align-items-end justify-content-end ">
                 {% if not object.review.exists  %}
                     <a href="{% url 'review-create' object.id %}" class="card-link btn btn-primary m-3">Créer une
@@ -34,34 +34,35 @@
                     </a>
                 {% endif %}
             </div>
+        {% endif %}
         </div>
     </div>
-{% else %}
-    <div class="card m-3 w-100" >
-        <div class="row g-0">
-            <div class="card-body">
-                <row class="d-flex">
-                    <small>{{ request.user }} a demandé cette critique</small>
-                    <small class="ms-auto">
-                        {{ object.time_created|date:"H:i" }}, {{ object.time_created|date:"d M Y" }}
-                    </small>
-                </row>
-                <hr class="">
-                <h4 class="card-title">{{ object.title }}</h4>
-                <p class="card-text">{{ object.description }}</p>
-            </div>
-        </div>
-        <div class="row g-2">
-            <div class="col-6 ">
-                {% if object.image %}
-                    <img src="{{ object.image.url }}"
-                         class="img-thumbnail mx-3 mb-3 w-50 "
-                         alt="Image de la critique {{ object.title }}">
-                {% endif %}
-            </div>
+{#{% else %}#}
+{#    <div class="card m-3 w-100" >#}
+{#        <div class="row g-0">#}
+{#            <div class="card-body">#}
+{#                <row class="d-flex">#}
+{#                    <small>{{ request.user }} a demandé cette critique</small>#}
+{#                    <small class="ms-auto">#}
+{#                        {{ object.time_created|date:"H:i" }}, {{ object.time_created|date:"d M Y" }}#}
+{#                    </small>#}
+{#                </row>#}
+{#                <hr class="">#}
+{#                <h4 class="card-title">{{ object.title }}</h4>#}
+{#                <p class="card-text">{{ object.description }}</p>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="row g-2">#}
+{#            <div class="col-6 ">#}
+{#                {% if object.image %}#}
+{#                    <img src="{{ object.image.url }}"#}
+{#                         class="img-thumbnail mx-3 mb-3 w-50 "#}
+{#                         alt="Image de la critique {{ object.title }}">#}
+{#                {% endif %}#}
+{#            </div>#}
 {#            <div class="col-6 d-flex align-items-end justify-content-end ">#}
 {#                #}
 {#            </div>#}
-        </div>
-    </div>
-{% endif %}
+{#        </div>#}
+{#    </div>#}
+{##}

@@ -14,7 +14,11 @@
     <div class="row justify-content-center">
         <div class="col-6 mx-auto">
             {% for post in posts %}
-                {% include 'reviews/ticket/detail_snippet.html' with object=post %}
+                {% if post.content_type == 'TICKET' %}
+                    {% include 'reviews/ticket/detail_snippet.html' with object=post %}
+                {% elif post.content_type == 'REVIEW'%}
+                    {% include 'reviews/review/detail_snippet.html' with object=post %}
+                {% endif %}
             {% endfor %}
         </div>
     </div>

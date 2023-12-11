@@ -1,0 +1,36 @@
+{% load static %}
+    <div class="card m-3 w-100" >
+        <div class="row g-0">
+            <div class="card-body">
+                <row class="d-flex">
+                    {% if object.user == request.user %}
+                        <small>Vous avez publié cette critique</small>
+                    {% else %}
+                        <small>{{ object.user }} a publié cette critique</small>
+                    {% endif %}
+
+                    <small class="ms-auto">
+                        {{ object.time_created|date:"H:i" }}, {{ object.time_created|date:"d M Y" }}
+                    </small>
+                </row>
+                <hr class="">
+                <div class="d-inline">
+                    <h4 class="card-title mx-auto">{{ object.headline }} -
+                        <i class="bi bi-star{% if object.rating >= 1 %}-fill {% endif %} text-warning"></i>
+                        <i class="bi bi-star{% if object.rating >= 2 %}-fill {% endif %} text-warning"></i>
+                        <i class="bi bi-star{% if object.rating >= 3 %}-fill {% endif %}"></i>
+                        <i class="bi bi-star{% if object.rating >= 4 %}-fill {% endif %}"></i>
+                        <i class="bi bi-star{% if object.rating >= 5 %}-fill {% endif %}"></i>
+                    </h4>
+                </div>
+                <ul class="inline-group"></ul>
+                <p class="card-text">{{ object.body }}</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    {% include "reviews/ticket/detail_snippet.html" with object=object.ticket in_review=True %}
+                </div>
+            </div>
+        </div>
+    </div>
+{#    <div class="row border border-top-0 p-2">#}
+{##}
+{#    </div>#}

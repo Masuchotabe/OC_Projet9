@@ -1,4 +1,7 @@
+from itertools import chain
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Value, CharField
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
@@ -10,10 +13,17 @@ from reviews.forms import TicketForm, ReviewForm, UserFollowForm
 from reviews.models import Ticket, Review, UserFollows
 
 
-# Create your views here.
-
 def home(request):
-    posts = Ticket.objects.all()
+    user = request.user
+    tickets = user.get_viewable_tickets()
+    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+
+    reviews = user.get_viewable_reviews()
+    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+
+    posts = sorted(
+        chain(reviews, tickets), key=lambda post: post.time_created, reverse=True
+    )
     return render(request, "reviews/home.html", locals())
 
 
