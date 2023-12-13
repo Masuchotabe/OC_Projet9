@@ -1,6 +1,6 @@
 from crispy_forms.bootstrap import InlineRadios, FieldWithButtons
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, HTML, Field
+from crispy_forms.layout import Submit, Layout, Field
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import RadioSelect, Textarea, CharField
@@ -14,24 +14,28 @@ class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         fields = ['title', 'description', "image"]
+        widgets = {
+            "description": Textarea(attrs={"rows": 3}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'TicketForm'
         self.helper.form_method = 'post'
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             'title',
             'description',
             'image',
-            Div(
-                HTML(
-                    """<a class="btn btn-secondary m-2" href="{% url 'home' %}">
-                    Annuler
-                    </a>"""),
-                Submit('submit', 'Enregistrer', css_class="m-2"),
-                css_class="d-flex justify-content-center"
-            )
+            # Div(
+            #     HTML(
+            #         """<a class="btn btn-secondary m-2" href="{% url 'home' %}">
+            #         Annuler
+            #         </a>"""),
+            #     Submit('submit', 'Enregistrer', css_class="m-2"),
+            #     css_class="d-flex justify-content-center"
+            # )
         )
 
 
@@ -54,18 +58,19 @@ class ReviewForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_id = 'ReviewForm'
         self.helper.form_method = 'post'
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             'headline',
             InlineRadios('rating'),
             'body',
-            Div(
-                HTML(
-                    """<a class="btn btn-secondary m-2" href="{% url 'home' %}">
-                    Annuler
-                    </a>"""),
-                Submit('submit', 'Enregistrer', css_class="m-2"),
-                css_class="d-flex justify-content-center"
-            )
+            # Div(
+            #     HTML(
+            #         """<a class="btn btn-secondary m-2" href="{% url 'home' %}">
+            #         Annuler
+            #         </a>"""),
+            #     Submit('submit', 'Enregistrer', css_class="m-2"),
+            #     css_class="d-flex justify-content-center"
+            # )
         )
 
 

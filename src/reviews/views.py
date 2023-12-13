@@ -55,6 +55,27 @@ class TicketDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("home")
 
 
+class ReviewAndTicketCreateView(LoginRequiredMixin, CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name_suffix = "/extended_form"
+    success_url = reverse_lazy("home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ticket_form'] = TicketForm()
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        ticket_form = TicketForm(self.request.POST, self.request.FILES)
+        ticket_form.instance.user = self.request.user
+        if ticket_form.is_valid():
+            ticket = ticket_form.save()
+            form.instance.ticket = ticket
+        return super().form_valid(form)
+
+
 class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm

@@ -1,0 +1,29 @@
+{% extends "reviews/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <h2 class="text-center">Créer une critique</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div class="row border rounded-top p-2">
+                    <h4>Ticket</h4>
+                    {% crispy ticket_form %}
+                </div>
+                <div class="row border border-top-0 rounded-bottom  p-2">
+                    <h4>Critique</h4>
+                    {% crispy form %}
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-secondary m-2" href="{% url 'home' %}">
+                            Annuler
+                        </a>
+                        <button type="submit" value="Enregistrer" class="btn btn-primary mx-2 my-2">
+                            Enregistrer
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
