@@ -13,7 +13,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-6 mx-auto">
-            {% for post in posts %}
+            {% for post in object_list %}
                 {% if post.content_type == 'TICKET' %}
                     {% include 'reviews/ticket/detail_snippet.html' with object=post %}
                 {% elif post.content_type == 'REVIEW'%}

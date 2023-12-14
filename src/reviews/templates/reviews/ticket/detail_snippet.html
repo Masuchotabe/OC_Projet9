@@ -26,11 +26,19 @@
                          alt="Image de la critique {{ object.title }}">
                 {% endif %}
             </div>
-        {% if not in_review %}
-            <div class="col-6 d-flex align-items-end justify-content-end ">
+        {% if not is_included %}
+            <div class="col-6 d-flex align-items-end justify-content-end text-nowrap">
                 {% if not object.review.exists  %}
                     <a href="{% url 'review-create' object.id %}" class="card-link btn btn-primary m-3">Créer une
                         critique
+                    </a>
+                {% endif %}
+                {% if show_creator_button %}
+                    <a href="{% url 'ticket-update' object.id %}" class="card-link btn btn-warning m-3">
+                        Modifier
+                    </a>
+                    <a href="{% url 'ticket-delete' object.id %}" class="card-link btn btn-danger m-3">
+                        Supprimer
                     </a>
                 {% endif %}
             </div>

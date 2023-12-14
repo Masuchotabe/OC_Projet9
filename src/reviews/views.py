@@ -3,28 +3,37 @@ from itertools import chain
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Value, CharField
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, FormView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, FormView, ListView
 
 from authentication.models import User
 from reviews.forms import TicketForm, ReviewForm, UserFollowForm
 from reviews.models import Ticket, Review, UserFollows
 
 
-def home(request):
-    user = request.user
-    tickets = user.get_viewable_tickets()
-    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+class HomeView(LoginRequiredMixin, ListView):
+    template_name = "reviews/home.html"
 
-    reviews = user.get_viewable_reviews()
-    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+    def get_queryset(self):
+        user = self.request.user
+        tickets = user.get_viewable_tickets().annotate(content_type=Value('TICKET', CharField()))
+        reviews = user.get_viewable_reviews().annotate(content_type=Value('REVIEW', CharField()))
 
-    posts = sorted(
-        chain(reviews, tickets), key=lambda post: post.time_created, reverse=True
-    )
-    return render(request, "reviews/home.html", locals())
+        posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
+        return posts
+
+
+class UserPostsView(LoginRequiredMixin, ListView):
+    template_name = "reviews/user/posts_list.html"
+
+    def get_queryset(self):
+        user: User = self.request.user
+        tickets = user.tickets.all().annotate(content_type=Value('TICKET', CharField()))
+        reviews = user.reviews.all().annotate(content_type=Value('REVIEW', CharField()))
+
+        posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
+        return posts
 
 
 class TicketCreateView(LoginRequiredMixin, CreateView):
@@ -52,7 +61,8 @@ class TicketDetailView(LoginRequiredMixin, DetailView):
 
 class TicketDeleteView(LoginRequiredMixin, DeleteView):
     model = Ticket
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("user-posts-list")
+    template_name_suffix = "/confirm_delete"
 
 
 class ReviewAndTicketCreateView(LoginRequiredMixin, CreateView):
@@ -118,6 +128,12 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
         if ticket_id:
             form.instance.ticket_id = ticket_id
         return super().form_valid(form)
+
+
+class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+    model = Review
+    success_url = reverse_lazy("user-posts-list")
+    template_name_suffix = "/confirm_delete"
 
 
 class UserFollowView(LoginRequiredMixin, FormView):

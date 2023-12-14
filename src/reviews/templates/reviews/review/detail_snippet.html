@@ -26,8 +26,18 @@
                 <ul class="inline-group"></ul>
                 <p class="card-text">{{ object.body }}</p>
                 <div class="d-flex justify-content-center align-items-center">
-                    {% include "reviews/ticket/detail_snippet.html" with object=object.ticket in_review=True %}
+                    {% include "reviews/ticket/detail_snippet.html" with object=object.ticket is_included=True %}
                 </div>
+                <div class="col-auto d-flex align-items-end justify-content-end text-nowrap">
+                {% if show_creator_button and not is_included %}
+                    <a href="{% url 'review-update' object.id %}" class="card-link btn btn-warning ms-3">
+                        Modifier
+                    </a>
+                    <a href="{% url 'review-delete' object.id %}" class="card-link btn btn-danger ms-3">
+                        Supprimer
+                    </a>
+                {% endif %}
+            </div>
             </div>
         </div>
     </div>
