@@ -23,7 +23,6 @@
                         <i class="bi bi-star{% if object.rating >= 5 %}-fill {% endif %} text-warning"></i>
                     </h4>
                 </div>
-                <ul class="inline-group"></ul>
                 <p class="card-text">{{ object.body }}</p>
                 <div class="d-flex justify-content-center align-items-center">
                     {% include "reviews/ticket/detail_snippet.html" with object=object.ticket is_included=True %}

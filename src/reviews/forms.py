@@ -28,14 +28,6 @@ class TicketForm(forms.ModelForm):
             'title',
             'description',
             'image',
-            # Div(
-            #     HTML(
-            #         """<a class="btn btn-secondary m-2" href="{% url 'home' %}">
-            #         Annuler
-            #         </a>"""),
-            #     Submit('submit', 'Enregistrer', css_class="m-2"),
-            #     css_class="d-flex justify-content-center"
-            # )
         )
 
 
@@ -63,14 +55,6 @@ class ReviewForm(forms.ModelForm):
             'headline',
             InlineRadios('rating'),
             'body',
-            # Div(
-            #     HTML(
-            #         """<a class="btn btn-secondary m-2" href="{% url 'home' %}">
-            #         Annuler
-            #         </a>"""),
-            #     Submit('submit', 'Enregistrer', css_class="m-2"),
-            #     css_class="d-flex justify-content-center"
-            # )
         )
 
 
@@ -84,8 +68,9 @@ class UserFollowForm(forms.Form):
         self.helper.form_method = 'post'
         self.helper.form_show_labels = False
         self.helper.layout = Layout(
-            FieldWithButtons(Field('username', placeholder="Nom d'utilisateur"),
-                             Submit('submit', 'Suivre')),
+            FieldWithButtons(Field('username', placeholder="Nom d'utilisateur", aria_label="Nom d'utilisateur"),
+                             Submit('submit', 'Suivre')
+                             ),
         )
 
     def clean_username(self):
