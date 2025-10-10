@@ -1,10 +1,13 @@
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import redirect
 from django.urls import path
+from django.views.generic import RedirectView
 
 from reviews import views
 
 urlpatterns = [
+                  path("", RedirectView.as_view(pattern_name='home', permanent=False)),
                   path("home/", views.HomeView.as_view(), name='home'),
                   path('tickets/create/', views.TicketCreateView.as_view(), name='ticket-create'),
                   path('tickets/<int:pk>/update/', views.TicketUpdateView.as_view(), name='ticket-update'),

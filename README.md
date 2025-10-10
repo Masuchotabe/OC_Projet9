@@ -26,7 +26,16 @@ pipenv shell
 Lancer le serveur
 
 ```bash
+cd src/
 python manage.py runserver
 ```
 
 Le projet est accessible sur http://127.0.0.1:8000/
+
+## Utilisation
+Ce projet est un projet de démonstration. 
+Les utilisateurs sont  
+`book_admin` `JeSuisUnSuperBook`  
+
+
+
