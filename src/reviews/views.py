@@ -5,7 +5,14 @@ from django.db.models import Value, CharField
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, FormView, ListView
+from django.views.generic import (
+    CreateView,
+    UpdateView,
+    DeleteView,
+    DetailView,
+    FormView,
+    ListView,
+)
 
 from authentication.models import User
 from reviews.forms import TicketForm, ReviewForm, UserFollowForm
@@ -17,10 +24,16 @@ class HomeView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user = self.request.user
-        tickets = user.get_viewable_tickets().annotate(content_type=Value('TICKET', CharField()))
-        reviews = user.get_viewable_reviews().annotate(content_type=Value('REVIEW', CharField()))
+        tickets = user.get_viewable_tickets().annotate(
+            content_type=Value("TICKET", CharField())
+        )
+        reviews = user.get_viewable_reviews().annotate(
+            content_type=Value("REVIEW", CharField())
+        )
 
-        posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
+        posts = sorted(
+            chain(reviews, tickets), key=lambda post: post.time_created, reverse=True
+        )
         return posts
 
 
@@ -29,10 +42,12 @@ class UserPostsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         user: User = self.request.user
-        tickets = user.tickets.all().annotate(content_type=Value('TICKET', CharField()))
-        reviews = user.reviews.all().annotate(content_type=Value('REVIEW', CharField()))
+        tickets = user.tickets.all().annotate(content_type=Value("TICKET", CharField()))
+        reviews = user.reviews.all().annotate(content_type=Value("REVIEW", CharField()))
 
-        posts = sorted(chain(reviews, tickets), key=lambda post: post.time_created, reverse=True)
+        posts = sorted(
+            chain(reviews, tickets), key=lambda post: post.time_created, reverse=True
+        )
         return posts
 
 
@@ -73,7 +88,7 @@ class ReviewAndTicketCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['ticket_form'] = TicketForm()
+        context["ticket_form"] = TicketForm()
         return context
 
     def form_valid(self, form):
@@ -94,15 +109,15 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ticket_id = self.kwargs.get('ticket_id')
+        ticket_id = self.kwargs.get("ticket_id")
         if ticket_id:
             ticket = Ticket.objects.get(id=ticket_id)
-            context['ticket'] = ticket
+            context["ticket"] = ticket
         return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        ticket_id = self.kwargs.get('ticket_id')
+        ticket_id = self.kwargs.get("ticket_id")
         if ticket_id:
             form.instance.ticket_id = ticket_id
         return super().form_valid(form)
@@ -116,15 +131,15 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ticket_id = self.kwargs.get('ticket_id')
+        ticket_id = self.kwargs.get("ticket_id")
         if ticket_id:
             ticket = Ticket.objects.get(id=ticket_id)
-            context['ticket'] = ticket
+            context["ticket"] = ticket
         return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        ticket_id = self.kwargs.get('ticket_id')
+        ticket_id = self.kwargs.get("ticket_id")
         if ticket_id:
             form.instance.ticket_id = ticket_id
         return super().form_valid(form)
@@ -150,7 +165,6 @@ class UserFollowView(LoginRequiredMixin, FormView):
 
 
 class UserUnfollowView(LoginRequiredMixin, View):
-
     def post(self, request, user_follow_id, *args, **kwargs):
         user = self.request.user
         user.following.get(id=user_follow_id).delete()
