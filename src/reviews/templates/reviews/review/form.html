@@ -3,8 +3,8 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-6 mx-auto">
-            <div class="row border rounded-top">
+        <div class="mx-auto">
+            <div class="row border rounded-top p-2">
                 <p class="mb-0">Vous êtes en train de poster en réponse à </p>
                 <div class="d-flex justify-content-center align-items-center px-4">
                     {% if form.instance.ticket %}
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="row border border-top-0 p-2">
-                <h6>Critique</h6>
+                <h4>Critique</h4>
                 <form method="post">
                     {% crispy form %}
                     <div class="d-flex justify-content-center">

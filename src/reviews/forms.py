@@ -17,6 +17,7 @@ class TicketForm(forms.ModelForm):
         widgets = {
             "description": Textarea(attrs={"rows": 3}),
         }
+        labels = {"title": "Titre"}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

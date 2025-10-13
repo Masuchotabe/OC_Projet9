@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="row justify-content-center">
-        <div class="col-6 mx-auto">
+        <div class="col-12 col-lg-8 mx-auto">
             {% for post in object_list %}
                 {% if post.content_type == 'TICKET' %}
                     {% include 'reviews/ticket/detail_snippet.html' with object=post show_creator_button=True %}
