@@ -5,6 +5,7 @@ from authentication.forms import CustomUserCreationForm
 
 # Create your views here.
 def user_registration(request):
+    """User registration view"""
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():

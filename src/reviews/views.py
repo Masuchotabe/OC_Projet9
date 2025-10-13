@@ -20,6 +20,11 @@ from reviews.models import Ticket, Review, UserFollows
 
 
 class HomeView(LoginRequiredMixin, ListView):
+    """
+    Displays the main feed for the logged-in user.
+    Combines tickets and reviews from followed users and the user's own
+    posts, then sorts them by creation date.
+    """
     template_name = "reviews/home.html"
 
     def get_queryset(self):
@@ -31,6 +36,7 @@ class HomeView(LoginRequiredMixin, ListView):
             content_type=Value("REVIEW", CharField())
         )
 
+        # Merge the two querysets into a single sorted list
         posts = sorted(
             chain(reviews, tickets), key=lambda post: post.time_created, reverse=True
         )
@@ -38,6 +44,10 @@ class HomeView(LoginRequiredMixin, ListView):
 
 
 class UserPostsView(LoginRequiredMixin, ListView):
+    """
+    Displays a list of all posts (tickets and reviews) created by the
+    logged-in user.
+    """
     template_name = "reviews/user/posts_list.html"
 
     def get_queryset(self):
@@ -45,6 +55,7 @@ class UserPostsView(LoginRequiredMixin, ListView):
         tickets = user.tickets.all().annotate(content_type=Value("TICKET", CharField()))
         reviews = user.reviews.all().annotate(content_type=Value("REVIEW", CharField()))
 
+        # Merge the two querysets into a single sorted list
         posts = sorted(
             chain(reviews, tickets), key=lambda post: post.time_created, reverse=True
         )
@@ -52,6 +63,7 @@ class UserPostsView(LoginRequiredMixin, ListView):
 
 
 class TicketCreateView(LoginRequiredMixin, CreateView):
+    """Displays a form to create a new ticket."""
     model = Ticket
     form_class = TicketForm
     template_name_suffix = "/form"
@@ -63,6 +75,7 @@ class TicketCreateView(LoginRequiredMixin, CreateView):
 
 
 class TicketUpdateView(LoginRequiredMixin, UpdateView):
+    """Displays a form to edit an existing ticket."""
     model = Ticket
     form_class = TicketForm
     template_name_suffix = "/form"
@@ -70,17 +83,20 @@ class TicketUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class TicketDetailView(LoginRequiredMixin, DetailView):
+    """Displays the details of a specific ticket."""
     model = Ticket
     template_name_suffix = "/detail"
 
 
 class TicketDeleteView(LoginRequiredMixin, DeleteView):
+    """Displays a confirmation page to delete a ticket."""
     model = Ticket
     success_url = reverse_lazy("user-posts-list")
     template_name_suffix = "/confirm_delete"
 
 
 class ReviewAndTicketCreateView(LoginRequiredMixin, CreateView):
+    """Displays a form to create a ticket and a review simultaneously."""
     model = Review
     form_class = ReviewForm
     template_name_suffix = "/extended_form"
@@ -102,6 +118,7 @@ class ReviewAndTicketCreateView(LoginRequiredMixin, CreateView):
 
 
 class ReviewCreateView(LoginRequiredMixin, CreateView):
+    """Displays a form to create a review in response to an existing ticket."""
     model = Review
     form_class = ReviewForm
     template_name_suffix = "/form"
@@ -124,6 +141,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
 
 class ReviewUpdateView(LoginRequiredMixin, UpdateView):
+    """Displays a form to edit an existing review."""
     model = Review
     form_class = ReviewForm
     template_name_suffix = "/form"
@@ -146,12 +164,18 @@ class ReviewUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class ReviewDeleteView(LoginRequiredMixin, DeleteView):
+    """Displays a confirmation page to delete a review."""
     model = Review
     success_url = reverse_lazy("user-posts-list")
     template_name_suffix = "/confirm_delete"
 
 
 class UserFollowView(LoginRequiredMixin, FormView):
+    """
+    Manages the "Subscriptions" page.
+    Displays a form to follow new users, as well as lists of followed users
+    and followers.
+    """
     form_class = UserFollowForm
     success_url = reverse_lazy("user-follow")
     template_name = "reviews/user/follow_form.html"
@@ -160,11 +184,14 @@ class UserFollowView(LoginRequiredMixin, FormView):
         user = self.request.user
         username = form.cleaned_data["username"]
         user_to_follow = User.objects.get_by_natural_key(username)
+        # Create the follow relationship
         UserFollows.objects.create(user=user, followed_user=user_to_follow)
         return HttpResponseRedirect(self.get_success_url())
 
 
 class UserUnfollowView(LoginRequiredMixin, View):
+    """Handles the logic for unfollowing a user."""
+
     def post(self, request, user_follow_id, *args, **kwargs):
         user = self.request.user
         user.following.get(id=user_follow_id).delete()
