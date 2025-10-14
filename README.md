@@ -14,7 +14,7 @@ Documentation pipenv si problème lors de l'installation : [Documentation pipenv
 # install pipenv if needed
 pip install pipenv
 # clone repo
-git clone https://github.com/tmoreau/OC_Projet9.git
+git clone https://github.com/Masuchotabe/OC_Projet9.git
 # go to repo
 cd OC_Projet9 
 # create env + install requirements 
