@@ -20,6 +20,7 @@ cd OC_Projet9
 # create env + install requirements 
 pipenv install
 ```
+Il faut ensuite créer un fichier .env sur le modèle du fichier .env.template et remplir la secret_Key et la variable de Debug avec True ou False
 
 Activer l'environnement virtuel
 ```bash
